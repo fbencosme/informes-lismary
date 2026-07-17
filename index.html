@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="color-scheme" content="light dark">
+<title>Informes Diarios de Lismary</title>
+</head>
+<body>
+<style>
+:root{
+  --paper:#f5f1e6; --panel:#fbf8f0; --ink:#26333a; --ink-soft:#5f6d70;
+  --rule:#e3dccb; --teal:#0f766e; --teal-deep:#0b5a53; --gold:#b8862f;
+  --gold-soft:#f0e3c4; --rose:#bd5b52; --shadow:0 10px 30px rgba(60,50,30,.09);
+}
+@media (prefers-color-scheme:dark){
+  :root{ --paper:#14201f; --panel:#1b2827; --ink:#e9e2d3; --ink-soft:#9fb0ac;
+    --rule:#2f3f3c; --teal:#4cc3b3; --teal-deep:#69d3c4; --gold:#d9b25c;
+    --gold-soft:#33301f; --rose:#e08a80; --shadow:0 10px 30px rgba(0,0,0,.38); }
+}
+:root[data-theme=light]{ --paper:#f5f1e6; --panel:#fbf8f0; --ink:#26333a; --ink-soft:#5f6d70;
+  --rule:#e3dccb; --teal:#0f766e; --teal-deep:#0b5a53; --gold:#b8862f; --gold-soft:#f0e3c4;
+  --rose:#bd5b52; --shadow:0 10px 30px rgba(60,50,30,.09); }
+:root[data-theme=dark]{ --paper:#14201f; --panel:#1b2827; --ink:#e9e2d3; --ink-soft:#9fb0ac;
+  --rule:#2f3f3c; --teal:#4cc3b3; --teal-deep:#69d3c4; --gold:#d9b25c; --gold-soft:#33301f;
+  --rose:#e08a80; --shadow:0 10px 30px rgba(0,0,0,.38); }
+*{ box-sizing:border-box; }
+body{ margin:0; background:var(--paper); color:var(--ink);
+  font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  line-height:1.72; -webkit-font-smoothing:antialiased; }
+.sans{ font-family:ui-sans-serif,system-ui,"Segoe UI",Roboto,sans-serif; }
+.wrap{ max-width:720px; margin:0 auto; padding:0 22px 96px; }
+
+.cover{ padding:88px 4px 34px; text-align:center; }
+.eyebrow{ font-family:ui-sans-serif,system-ui,sans-serif; font-size:.7rem; letter-spacing:.42em;
+  text-transform:uppercase; color:var(--teal); }
+.cover h1{ font-size:clamp(2.4rem,7vw,4rem); line-height:1.04; margin:.28em 0 .12em;
+  font-weight:600; text-wrap:balance; letter-spacing:-.01em; }
+.cover .dedication{ color:var(--ink-soft); font-style:italic; font-size:1.2rem; }
+.cover .lede{ max-width:500px; margin:24px auto 0; color:var(--ink-soft); font-size:1.05rem; }
+.tickets{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin:34px 0 8px; }
+.ticket{ background:var(--panel); border:1px solid var(--rule); border-radius:4px;
+  padding:14px 20px; position:relative; box-shadow:0 3px 14px rgba(90,70,30,.06); }
+.ticket::before,.ticket::after{ content:""; position:absolute; top:50%; width:11px; height:11px;
+  border-radius:50%; background:var(--paper); transform:translateY(-50%); }
+.ticket::before{ left:-6px; } .ticket::after{ right:-6px; }
+.ticket b{ display:block; font-size:1.7rem; color:var(--gold); font-variant-numeric:tabular-nums; }
+.ticket span{ font-family:ui-sans-serif,system-ui,sans-serif; font-size:.68rem; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--ink-soft); }
+.divider{ display:flex; align-items:center; gap:16px; color:var(--gold); margin:30px auto 4px;
+  max-width:320px; }
+.divider::before,.divider::after{ content:""; flex:1; height:1px; background:var(--rule); }
+.toc{ display:flex; flex-wrap:wrap; gap:9px; justify-content:center; max-width:560px;
+  margin:26px auto 0; }
+.toc a{ text-decoration:none; }
+.toc a span{ display:grid; place-items:center; width:36px; height:36px; border-radius:50%;
+  border:1px solid var(--rule); background:var(--panel); color:var(--ink-soft);
+  font-family:ui-sans-serif,system-ui,sans-serif; font-size:.82rem; font-variant-numeric:tabular-nums;
+  transition:transform .15s, background .15s, color .15s; }
+.toc a:hover span,.toc a:focus-visible span{ background:var(--teal); color:#fff;
+  border-color:var(--teal); transform:translateY(-3px); }
+.toc a:focus-visible{ outline:2px solid var(--gold); outline-offset:3px; border-radius:50%; }
+
+.letter{ display:flex; background:var(--panel); border:1px solid var(--rule); border-radius:10px;
+  margin:24px 0; overflow:hidden; box-shadow:var(--shadow); }
+.letter-rule{ width:8px; flex:0 0 8px;
+  background:repeating-linear-gradient(180deg,var(--gold) 0 14px,transparent 14px 26px); opacity:.55; }
+.letter-inner{ padding:30px 34px; flex:1; min-width:0; }
+.letter-head{ display:flex; align-items:baseline; justify-content:space-between; gap:12px;
+  flex-wrap:wrap; margin-bottom:16px; }
+.no{ font-family:ui-sans-serif,system-ui,sans-serif; font-size:.72rem; letter-spacing:.22em;
+  text-transform:uppercase; color:var(--teal); }
+.no b{ color:var(--ink); font-size:1rem; letter-spacing:.06em; margin-left:4px; }
+.hi{ font-style:italic; color:var(--rose); font-size:1.35rem; }
+.reading{ display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; margin-bottom:18px;
+  padding:9px 14px; background:var(--gold-soft); border-radius:6px; }
+.reading-ey{ font-family:ui-sans-serif,system-ui,sans-serif; font-size:.64rem; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--gold); }
+.reading-title{ font-weight:600; font-style:italic; }
+.reading-author{ color:var(--ink-soft); font-size:.9rem; }
+.prose p{ margin:0 0 15px; hyphens:auto; }
+.prose p:last-child{ margin-bottom:0; }
+.learned{ margin-top:24px; padding-top:20px; border-top:1px dashed var(--rule); }
+.learned-ey{ display:inline-flex; align-items:center; gap:9px;
+  font-family:ui-sans-serif,system-ui,sans-serif; font-size:.68rem; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--teal); margin-bottom:14px; }
+.learned-n{ background:var(--teal); color:#fff; border-radius:20px; padding:1px 9px;
+  font-size:.7rem; letter-spacing:0; }
+.glossary{ margin:0; display:grid; gap:2px; }
+.entry{ display:grid; grid-template-columns:minmax(96px,34%) 1fr; gap:14px; align-items:baseline;
+  padding:8px 2px; border-bottom:1px solid var(--rule); }
+.entry:last-child{ border-bottom:0; }
+.entry dt{ margin:0; font-weight:600; color:var(--teal-deep); font-size:1.02rem; }
+.entry dt .lang{ font-family:ui-monospace,"SF Mono",Menlo,monospace; font-size:.6rem;
+  letter-spacing:.1em; color:var(--gold); border:1px solid var(--gold-soft); background:var(--gold-soft);
+  border-radius:4px; padding:1px 5px; margin-left:8px; vertical-align:middle; text-transform:uppercase; }
+.entry dd{ margin:0; color:var(--ink-soft); }
+.closing{ text-align:right; margin-top:22px; font-style:italic; color:var(--ink-soft); }
+.hrt{ color:var(--rose); }
+footer{ text-align:center; margin-top:56px; color:var(--ink-soft); font-style:italic; }
+footer .sig{ display:block; margin-top:6px; font-size:1.4rem; color:var(--rose); }
+@media (max-width:560px){
+  .letter-inner{ padding:24px 20px; }
+  .entry{ grid-template-columns:1fr; gap:2px; }
+  .entry dd{ padding-left:2px; }
+}
+@media (prefers-reduced-motion:reduce){ *{ transition:none!important; } }
+</style>
+<div class="wrap">
+  <header class="cover">
+    <div class="eyebrow">Diario de aprendizaje &middot; 2019 &ndash; 2023</div>
+    <h1>Informes Diarios de Lismary</h1>
+    <p class="dedication">para papá</p>
+    <p class="lede">Cada día, una carta corta: las palabras nuevas que aprendía en inglés,
+      los capítulos de sus libros, y las pequeñas cosas del día. Aquí están, guardadas.</p>
+    <div class="tickets">
+      <div class="ticket"><b>21</b><span>Informes</span></div>
+      <div class="ticket"><b>129</b><span>Palabras</span></div>
+      <div class="ticket"><b>3</b><span>Libros</span></div>
+    </div>
+    <div class="divider">&#10086;</div>
+    <nav class="toc" aria-label="Ir a un informe"><a href="#d1"><span>01</span></a><a href="#d2"><span>02</span></a><a href="#d3"><span>03</span></a><a href="#d4"><span>04</span></a><a href="#d5"><span>05</span></a><a href="#d6"><span>06</span></a><a href="#d7"><span>07</span></a><a href="#d8"><span>08</span></a><a href="#d9"><span>09</span></a><a href="#d10"><span>10</span></a><a href="#d11"><span>11</span></a><a href="#d12"><span>12</span></a><a href="#d13"><span>13</span></a><a href="#d14"><span>14</span></a><a href="#d15"><span>15</span></a><a href="#d16"><span>16</span></a><a href="#d17"><span>17</span></a><a href="#d18"><span>18</span></a><a href="#d19"><span>19</span></a><a href="#d20"><span>20</span></a><a href="#d21"><span>21</span></a></nav>
+  </header>
+
+  <article class="letter" id="d1">
+    <div class="letter-rule"></div>
+    <div class="letter-inner">
+      <header class="letter-head">
+        <span class="no">Informe <b>01</b></span>
+        <span class="hi">Hi, dad!</span>
+      </header>
+      <div class="reading"><span class="reading-ey">Leyendo</span><span class="reading-title">Charlie y la fábrica de Chocolate</span><span class="reading-author">Roald Dahl</span></div>
+      <div class="prose"><p>Hoy aprendí sobre el cuidado de las axilas entre esos tips de cuidado estaban: no utilizar rasuradora, no exponer tanto a las axilas al sol, evitar utilizar desodorantes con mucho alcohol con un olor muy fuerte y que sientas que te maltratan la piel o, también se puede deber a la genética.</p><p>Otra cosa que puede generar esas manchas negras en tus axilas es: una enfermedad llamada ACANTOSIS NIGRICANS, la cual puede ser por obesidad o diabetes; en otras ocasiones puede ser una señal de advertencia de un tumor en un órgano interno, como el estómago o el hígado.</p><p>He seguido investigando recomiendaciones o tips para una rutina más cuidadosa y efectiva para las axilas.</p><p>Hasta ahora e leído 2 capítulos de &quot;Charlie y la fábrica de Chocolate&quot; llamados: Los billetes dorados y los dos primeros afortunados; el primero habla, de cómo les llega la noticia por medio del periódico, de que él señor willy wonka anuncia que cinco afortunados tendrán la oportunidad de poder entrar a su fábrica y lo que tienen que hacer para ello es que en algunas de las chocolatinas habrá un billete dorado, los cuales consigan ese billete dorado, podrán entrar a su fábrica y al final del recorrido le entregarán una gran cantidad de chocolatinas para toda su vida.</p><p>El segundo habla, de los dos primeros afortunados en encontrar el billete de oro, esos niños son: Augustus gloop, un niño que es muy obeso y que ama comer dulces; la segunda es una niña llamada Veruca salt, una niña que es mimada por sus padres y muy malcriada.</p><p>Este es mi informe del día de hoy, sobre mi estudio de Inglés, duolingo me dio un repaso de algo que ya me ha dado anteriormente, así que no es mucho de que hablar, aunque siempre intento aprender nuevas palabras; esto es todo.</p></div>
+      
+      <div class="closing">Thanks. <span class="hrt">&#9829;</span></div>
+    </div>
+  </article>
+  <article class="letter" id="d2">
+    <div class="letter-rule"></div>
+    <div class="letter-inner">
+      <header class="letter-head">
+        <span class="no">Informe <b>02</b></span>
+        <span class="hi">Hi, dad!</span>
+      </header>
+      
+      <div class="prose"><p>Hoy me la pasé el mayor tiempo limpiando, luego me bañé, me cepillé, me desenredé el pelo y me lavé la cara. Más tarde comí, al terminar de comer estuve en la cocina limpiando las bandejas etc...después de terminar fui a mi habitación e hice una lección de duolingo, no terminé todas las lecciones ya que el internet no aportó y dure un rato tratando de que me funcionara bien.</p><p>Llegó la hora de ir a buscar a mom etc...no aprendí nada nuevo durante el día😔 pero ahora en la noche quiero leer un poco y por lo menos aprender una nueva palabra, una información que aporte a mi aprendizaje o alguna información valiosa sobre el inglés; esto fue todo por el día de hoy.</p></div>
+      
+      <div class="closing">Thanks. <span class="hrt">&#9829;</span></div>
+    </div>
+  </article>
+  <article class="letter" id="d3">
+    <div class="letter-rule"></div>
+    <div class="letter-inner">
+      <header class="letter-head">
+        <span class="no">Informe <b>03</b></span>
+        <span class="hi">Hi, dad!</span>
+      </header>
+      <div class="reading"><span class="reading-ey">Leyendo</span><span class="reading-title">Charlie y la fábrica de Chocolate</span><span class="reading-author">Roald Dahl</span></div>
+      <div class="prose"><p>Hoy hice muchas cosas, pero me enfocaré en las cosas de mayor importancia y que tienen que ver con mi aprendizaje. Aprendí las dos cosas que se puede significar &quot;Country&quot; se puede significar pais o campo depende del contexto; que &quot;Sunset&quot; es puesta de sol o atardecer, que &quot;Bit&quot; es un poco, y la diferencia de los verbos en inglés, quiere decir en como dices que estás bailando en presente y que estabas bailando o que bailaste en tiempo pasado, más conocido como &quot;ING&quot;. También hice duolingo en el cual aprendí algunas de las palabras que ya te mencioné.</p><p>Leí dos capitulos de &quot;Charlie y la fábrica de Chocolate&quot; llamados: El cumpleaños de Charlie y se encuentran otros dos billetes dorados; el primero habla, de como le dan la chocolatina de wonka a charlie el día de su cumpleaños y al momento de abrirla no se encuentra con una gran sorpresa y todos quedan tristes porque no encontraron el billete dorado en la chocolatina.</p><p>El segundo habla, de los otros dos afortunados que encontraron los billetes dorados, esos niños son: la</p><p>Señorita Violet beauregarde, una niña que ama masticar chicle en todo momento y tiene un récord de comer un chicle por tres meses sin parar; el otro es el niño Mike tevé, un niño que ama ver en la tv programas de gángsters y personas que se dan tiros mutuamente y es un poco odioso y malcriado.</p><p>Este es mi informe del día de hoy, sobre que hice y que aprendí sobre el inglés, como ya sabes siempre intento aprender aunque sea una palabra en inglés, ahora seguiré aprendiendo terminando mi análisis; esto es todo.</p></div>
+      <div class="learned"><span class="learned-ey">Palabras nuevas<span class="learned-n">3</span></span><dl class="glossary"><div class="entry"><dt>Country<span class="lang">en</span></dt><dd>pais o campo depende del contexto</dd></div><div class="entry"><dt>Sunset<span class="lang">en</span></dt><dd>puesta de sol o atardecer</dd></div><div class="entry"><dt>Bit<span class="lang">en</span></dt><dd>un poco</dd></div></dl></div>
+      <div class="closing">Thanks. <span class="hrt">&#9829;</span></div>
+    </div>
+  </article>
+  <article class="letter" id="d4">
+    <div class="letter-rule"></div>
+    <div class="letter-inner">
+      <header class="letter-head">
+        <span class="no">Informe <b>04</b></span>
+        <span class="hi">Hi, dad!</span>
+      </header>
+      <div class="reading"><span class="reading-ey">Leyendo</span><span class="reading-title">Charlie y la fábrica de Chocolate</span><span class="reading-author">Roald Dahl</span></div>
+      <div class="prose"><p>Hoy fue un día en el que aprendí algunas nuevas palabras en inglés, así que me enfocaré en las cosas que tienen que ver con mi aprendizaje y cosas de mayor importancia. Aprendí los diferentes significados de &quot;Been&quot; se puede significar sido, habido o estado depende del contexto; que &quot;Ever&quot; es alguna vez; que &quot;Took&quot; es tomé; que &quot;Gone&quot; es ido; que &quot;Told&quot; es le dije o dicho depende del contexto; y por último que &quot;Yet&quot; es aún, todavía o pero, depende del contexto. También hice duolingo en el cual aprendí alguna de las palabras que ya te mencioné.</p><p>Leí dos capitulos de &quot;Charlie y la fábrica de Chocolate&quot; llamados: El abuelo Joe se arriesga y la familia empieza a pasar hambre; estos son los capitulos del día de hoy, no te describo de que se tratan ya que te fui contando poco a poco de que se trataba lo que leía.</p><p>Este es mi informe del día de hoy, sobre que hice y que aprendí sobre el inglés, como ya sabes siempre intento aprender aunque sea una palabra en inglés😁; esto es todo.</p></div>
+      <div class="learned"><span class="learned-ey">Palabras nuevas<span class="learned-n">6</span></span><dl class="glossary"><div class="entry"><dt>Been<span class="lang">en</span></dt><dd>sido, habido o estado depende del contexto</dd></div><div class="entry"><dt>Ever<span class="lang">en</span></dt><dd>alguna vez</dd></div><div class="entry"><dt>Took<span class="lang">en</span></dt><dd>tomé</dd></div><div class="entry"><dt>Gone<span class="lang">en</span></dt><dd>ido</dd></div><div class="entry"><dt>Told<span class="lang">en</span></dt><dd>le dije o dicho depende del contexto</dd></div><div class="entry"><dt>Yet<span class="lang">en</span></dt><dd>aún, todavía o pero, depende del contexto</dd></div></dl></div>
+      <div class="closing">Thanks. <span class="hrt">&#9829;</span></div>
+    </div>
+  </article>
+  <article class="letter" id="d5">
+    <div class="letter-rule"></div>
+    <div class="letter-inner">
+      <header class="letter-head">
+        <span class="no">Informe <b>05</b></span>
+        <span class="hi">Hi, dad!</span>
+      </header>
+      <div class="reading"><span class="reading-ey">Leyendo</span><span class="reading-title">Charlie y la fábrica de Chocolate</span><span class="reading-author">Roald Dahl</span></div>
+      <div class="prose"><p>Hoy fue un día normal, en el cual aprendí algunas palabras en inglés, y también hice duolingo donde aprendí esas palabras, así que me enfocaré en lo que aprendí hoy. Aprendí que significa &quot;Seen&quot; es visto; que &quot;Only&quot; es solo, solamente o único depende del contexto; que &quot;Has n&#x27;t&quot; es no ha (se que el cambio está en n&#x27;t pero no se muy bien la diferencia o lo que lo causa, no sé si me entendiste); y por último que &quot;Had&quot; es hemos😁, esto es lo que aprendí, llámame si quieres hacerme alguna pregunta.</p><p>Leí dos capitulos de &quot;Charlie y la fábrica de Chocolate&quot; llamados: El milagro y Lo que decía en el Billete Dorado; estos dos capitulos fueron muy emocionantes así que prefiero contarte cara a cara para que sea más divertido.</p><p>Este es mi informe del día de hoy, sobre que hice y que aprendí sobre el inglés, como ya siempre te he mencionado intento aprender aunque sea una palabra en inglés; esto es todo.</p></div>
+      <div class="learned"><span class="learned-ey">Palabras nuevas<span class="learned-n">4</span></span><dl class="glossary"><div class="entry"><dt>Seen<span class="lang">en</span></dt><dd>visto</dd></div><div class="entry"><dt>Only<span class="lang">en</span></dt><dd>solo, solamente o único depende del contexto</dd></div><div class="entry"><dt>Has n&#x27;t<span class="lang">en</span></dt><dd>no ha</dd></div><div class="entry"><dt>Had<span class="lang">en</span></dt><dd>hemos</dd></div></dl></div>
+      <div class="closing">Thanks. <span class="hrt">&#9829;</span></div>
+    </div>
+  </article>
+  <article class="letter" id="d6">
+    <div class="letter-rule"></div>
+    <div class="letter-inner">
+      <header class="letter-head">
+        <span class="no">Informe <b>06</b></span>
+        <span class="hi">Hi, dad!</span>
+      </header>
+      <div class="reading"><span class="reading-ey">Leyendo</span><span class="reading-title">Charlie y la fábrica de Chocolate</span><span class="reading-author">Roald Dahl</span></div>
+      <div class="prose"><p>Hoy fue un día más o menos normal, en el cual aprendí algunas palabras en inglés, así que me enfocaré en lo de más importancia, lo que aprendí e hice hoy. Aprendí que significa &quot;Field&quot; que es campo (no sabía que campo se podía decir de otra manera pero hoy lo aprendí); que &quot;Roof&quot; es techo; que &quot;Wooden&quot; es madera; que &quot;Wet&quot; es húmedo; que &quot;Farmer&quot; es agricultor; que &quot;Owl&quot; es búho; y por último que &quot;Around&quot; es alrededor, esto es lo que aprendí, también hice duolingo donde aprendí éstas palabras.</p><p>Leí dos capitulos de &quot;Charlie y la fábrica de Chocolate&quot; llamados: Llega el gran día y El señor Willy Wonka; el primero trata de el día en el que charlie y los demás afortunados visitan la fábrica Wonka.</p><p>El segundo trata, de como es su experiencia al entrar a la fábrica, como el señor willy wonka los recibe y parte de su recorrido.</p><p>Este es mi informe del día de hoy, sobre que hice y que aprendí sobre el inglés, como siempre digo intento aprender aunque sea una palabra nueva en inglés; esto es todo.</p></div>
+      <div class="learned"><span class="learned-ey">Palabras nuevas<span class="learned-n">6</span></span><dl class="glossary"><div class="entry"><dt>Roof<span class="lang">en</span></dt><dd>techo</dd></div><div class="entry"><dt>Wooden<span class="lang">en</span></dt><dd>madera</dd></div><div class="entry"><dt>Wet<span class="lang">en</span></dt><dd>húmedo</dd></div><div class="entry"><dt>Farmer<span class="lang">en</span></dt><dd>agricultor</dd></div><div class="entry"><dt>Owl<span class="lang">en</span></dt><dd>búho</dd></div><div class="entry"><dt>Around<span class="lang">en</span></dt><dd>alrededor</dd></div></dl></div>
+      <div class="closing">Thanks. <span class="hrt">&#9829;</span></div>
+    </div>
+  </article>
+  <article class="letter" id="d7">
+    <div class="letter-rule"></div>
+    <div class="letter-inner">
+      <header class="letter-head">
+        <span class="no">Informe <b>07</b></span>
+        <span class="hi">Hi, dad!</span>
+      </header>
+      <div class="reading"><span class="reading-ey">Leyendo</span><span class="reading-title">Charlie y la fábrica de Chocolate</span><span class="reading-author">Roald Dahl</span></div>
+      <div class="prose"><p>Hoy fue un día lleno de sorpresas y cosas inesperadas, en el cual aprendí algunas palabras en inglés (siempre aprendo palabras nuevas 😊), así que me enfocaré en lo de más importancia y de lo que aprendí. Aprendí que otro significado puede tener &quot;Nature&quot; es carácter; que &quot;View&quot; se puede significar punto; que &quot;Sound&quot; es sonido; que &quot;Noise&quot; es ruido; que &quot;Afraid&quot; es miedo; que &quot;Far&quot; es lejos; que &quot;Wall&quot; es pared; y por último que &quot;Path&quot; es camino, esto es lo que aprendí, también hice duolingo donde aprendí éstas palabras.</p><p>Leí dos capitulos de &quot;Charlie y la fábrica de Chocolate&quot; llamados:Tc El Recinto del Chocolate y Los Oompa- Loompas, estos dos capitulos fueron muy cool, así que prefiero contarte cara a cara la experiencia.</p><p>Este es mi informe del día de hoy, sobre que hice y que aprendí sobre el inglés, como siempre digo intento aprender aunque sea una palabra nueva en inglés; esto es todo.</p></div>
+      <div class="learned"><span class="learned-ey">Palabras nuevas<span class="learned-n">8</span></span><dl class="glossary"><div class="entry"><dt>Nature<span class="lang">en</span></dt><dd>carácter</dd></div><div class="entry"><dt>View<span class="lang">en</span></dt><dd>punto</dd></div><div class="entry"><dt>Sound<span class="lang">en</span></dt><dd>sonido</dd></div><div class="entry"><dt>Noise<span class="lang">en</span></dt><dd>ruido</dd></div><div class="entry"><dt>Afraid<span class="lang">en</span></dt><dd>miedo</dd></div><div class="entry"><dt>Far<span class="lang">en</span></dt><dd>lejos</dd></div><div class="entry"><dt>Wall<span class="lang">en</span></dt><dd>pared</dd></div><div class="entry"><dt>Path<span class="lang">en</span></dt><dd>camino</dd></div></dl></div>
+      <div class="closing">Thanks. <span class="hrt">&#9829;</span></div>
+    </div>
+  </article>
+  <article class="letter" id="d8">
+    <div class="letter-rule"></div>
+    <div class="letter-inner">
+      <header class="letter-head">
+        <span class="no">Informe <b>08</b></span>
+        <span class="hi">Hi, dad!</span>
+      </header>
+      <div class="reading"><span class="reading-ey">Leyendo</span><span class="reading-title">Charlie y la fábrica de Chocolate</span><span class="reading-author">Roald Dahl</span></div>
+      <div class="prose"><p>Hoy fue un día normal, en el cual aprendí algunas palabras en inglés. Aprendí que significa &quot;Hurts&quot; es duele; que &quot;Break&quot; se puede significar rompiste depende del contexto; que &quot;Matter&quot; se puede significar problema; que &quot;Toe&quot; es dedo del pie; que &quot;Back&quot; se puede significar espalda depende del contexto; y por último que &quot;Wear&quot; es usar, esto es lo que aprendí, también hice duolingo donde aprendí éstas palabras.</p><p>Leí dos capitulos de &quot;Charlie y la fábrica de Chocolate&quot; llamados: Augustus Gloop se va por un tubo y Por el río de chocolate; el primero trata de como Augustus Gloop se va por uno de los tubos y todo lo relacionado con ese suceso.</p><p>El segundo trata, de el transcurso que tuvieron por el río de chocolate y parte de su recorrido por él.</p><p>Este es mi informe del día de hoy, sobre que hice y que aprendí sobre el inglés, como siempre siempre digo intento aprender una palabra nueva en inglés; esto es todo.</p></div>
+      <div class="learned"><span class="learned-ey">Palabras nuevas<span class="learned-n">6</span></span><dl class="glossary"><div class="entry"><dt>Hurts<span class="lang">en</span></dt><dd>duele</dd></div><div class="entry"><dt>Break<span class="lang">en</span></dt><dd>rompiste depende del contexto</dd></div><div class="entry"><dt>Matter<span class="lang">en</span></dt><dd>problema</dd></div><div class="entry"><dt>Toe<span class="lang">en</span></dt><dd>dedo del pie</dd></div><div class="entry"><dt>Back<span class="lang">en</span></dt><dd>espalda depende del contexto</dd></div><div class="entry"><dt>Wear<span class="lang">en</span></dt><dd>usar</dd></div></dl></div>
+      <div class="closing">Thanks. <span class="hrt">&#9829;</span></div>
+    </div>
+  </article>
+  <article class="letter" id="d9">
+    <div class="letter-rule"></div>
+    <div class="letter-inner">
+      <header class="letter-head">
+        <span class="no">Informe <b>09</b></span>
+        <span class="hi">Hi, dad!</span>
+      </header>
+      <div class="reading"><span class="reading-ey">Leyendo</span><span class="reading-title">Charlie y la fábrica de Chocolate</span><span class="reading-author">Roald Dahl</span></div>
+      <div class="prose"><p>Hoy fue un día al igual que cualquier otro, en el cual aprendí algunas palabras en inglés. Aprendí que significa &quot;Tooth&quot; es diente; que &quot;Neck&quot; es cuello; que &quot;Cloudy&quot; es nublado; que &quot;Blood&quot; es sangre; que &quot;Reason&quot; es razón; y por último que &quot;Worse&quot; es peor, esto es lo que aprendí el día de hoy, también hice duolingo donde aprendí éstas palabras.</p><p>Leí dos capitulos de &quot;Charlie y la fábrica de Chocolate&quot; llamados: La Sala de Invenciones: Caramelos Eternos y Toffe Capilar y La gran máquina de chicle; los cuales no he leído pero leeré, así que más tarde te diré sobre que trata.</p><p>También analicé un párrafo de el libro &quot;Heidi&quot; en inglés el cual tengo que darle un último chequeo y analizarlo una vez más para enseñartelo.</p><p>Este es mi informe del día de hoy, sobre que hice y que aprendí sobre el inglés, como siempre siempre digo intento aprender una palabra nueva en inglés todos los días; esto es todo.</p></div>
+      <div class="learned"><span class="learned-ey">Palabras nuevas<span class="learned-n">6</span></span><dl class="glossary"><div class="entry"><dt>Tooth<span class="lang">en</span></dt><dd>diente</dd></div><div class="entry"><dt>Neck<span class="lang">en</span></dt><dd>cuello</dd></div><div class="entry"><dt>Cloudy<span class="lang">en</span></dt><dd>nublado</dd></div><div class="entry"><dt>Blood<span class="lang">en</span></dt><dd>sangre</dd></div><div class="entry"><dt>Reason<span class="lang">en</span></dt><dd>razón</dd></div><div class="entry"><dt>Worse<span class="lang">en</span></dt><dd>peor</dd></div></dl></div>
+      <div class="closing">Thanks. <span class="hrt">&#9829;</span></div>
+    </div>
+  </article>
+  <article class="letter" id="d10">
+    <div class="letter-rule"></div>
+    <div class="letter-inner">
+      <header class="letter-head">
+        <span class="no">Informe <b>10</b></span>
+        <span class="hi">Hi, dad!</span>
+      </header>
+      <div class="reading"><span class="reading-ey">Leyendo</span><span class="reading-title">Charlie y la fábrica de Chocolate</span><span class="reading-author">Roald Dahl</span></div>
+      <div class="prose"><p>Hoy fue un día diferente ya que es fin de semana, en el cual aprendí algunas palabras en inglés. Aprendí que significa &quot;Take care&quot; es cuídate; que &quot;Sailing&quot; es navegar; que &quot;Save&quot; es salvar; que &quot;Griddle&quot; es plancha; que &quot;Shelf&quot; es estante&quot;; que &quot;Retain&quot; es conservar y por último que &quot;Often&quot; es a menudo, esto es lo que aprendí el día de hoy, también hice duolingo donde aprendí éstas palabras.</p><p>Leí dos capitulos de &quot;Charlie y la fábrica de Chocolate&quot; llamados: Adiós, Violet y Por el corredor; ambos son muy divertidos y emocionantes, de los cuales ya te hablé.</p><p>Este es mi informe del día de hoy, sobre que hice y que aprendí sobre el inglés, como siempre siempre digo intento aprender una palabra nueva en inglés todos los días; esto es todo.</p></div>
+      <div class="learned"><span class="learned-ey">Palabras nuevas<span class="learned-n">7</span></span><dl class="glossary"><div class="entry"><dt>Take care<span class="lang">en</span></dt><dd>cuídate</dd></div><div class="entry"><dt>Sailing<span class="lang">en</span></dt><dd>navegar</dd></div><div class="entry"><dt>Save<span class="lang">en</span></dt><dd>salvar</dd></div><div class="entry"><dt>Griddle<span class="lang">en</span></dt><dd>plancha</dd></div><div class="entry"><dt>Shelf<span class="lang">en</span></dt><dd>estante</dd></div><div class="entry"><dt>Retain<span class="lang">en</span></dt><dd>conservar</dd></div><div class="entry"><dt>Often<span class="lang">en</span></dt><dd>a menudo</dd></div></dl></div>
+      <div class="closing">Thanks. <span class="hrt">&#9829;</span></div>
+    </div>
+  </article>
+  <article class="letter" id="d11">
+    <div class="letter-rule"></div>
+    <div class="letter-inner">
+      <header class="letter-head">
+        <span class="no">Informe <b>11</b></span>
+        <span class="hi">Hi, dad!</span>
+      </header>
+      <div class="reading"><span class="reading-ey">Leyendo</span><span class="reading-title">Charlie y la fábrica de Chocolate</span><span class="reading-author">Roald Dahl</span></div>
+      <div class="prose"><p>Hoy fue un día diferente ya que es fin de semana, en el cual aprendí algunas palabras en inglés. Aprendí que significa &quot;Each&quot; es cada; que &quot;Almost&quot; es casi; que &quot;Meal&quot; es comida; que &quot;Under&quot; es debajo; que &quot;Ride&quot; es conduce; que &quot;Mess&quot; es lío; que &quot;Thumb&quot; es pulgar; que &quot;Pinky&quot; es meñique; que &quot;Horn&quot; es bocina; que &quot;Dry&quot; es secado; y por último que &quot;Pillow&quot; es almohada, esto es lo que aprendí el día de hoy, también hice duolingo donde aprendí éstas palabras.</p><p>Leí dos capitulos de &quot;Charlie y la fábrica de Chocolate&quot; llamados: Caramelos cuadrados que se vuelven en redondo y Veruca en el Cuarto de las Nueces; de los cuales ya te hablaré.</p><p>Este es mi informe del día de hoy, sobre que hice y que aprendí sobre el inglés, como siempre digo intento aprender palabras nuevas en inglés todos los días; esto es todo.</p></div>
+      <div class="learned"><span class="learned-ey">Palabras nuevas<span class="learned-n">11</span></span><dl class="glossary"><div class="entry"><dt>Each<span class="lang">en</span></dt><dd>cada</dd></div><div class="entry"><dt>Almost<span class="lang">en</span></dt><dd>casi</dd></div><div class="entry"><dt>Meal<span class="lang">en</span></dt><dd>comida</dd></div><div class="entry"><dt>Under<span class="lang">en</span></dt><dd>debajo</dd></div><div class="entry"><dt>Ride<span class="lang">en</span></dt><dd>conduce</dd></div><div class="entry"><dt>Mess<span class="lang">en</span></dt><dd>lío</dd></div><div class="entry"><dt>Thumb<span class="lang">en</span></dt><dd>pulgar</dd></div><div class="entry"><dt>Pinky<span class="lang">en</span></dt><dd>meñique</dd></div><div class="entry"><dt>Horn<span class="lang">en</span></dt><dd>bocina</dd></div><div class="entry"><dt>Dry<span class="lang">en</span></dt><dd>secado</dd></div><div class="entry"><dt>Pillow<span class="lang">en</span></dt><dd>almohada</dd></div></dl></div>
+      <div class="closing">Thanks. <span class="hrt">&#9829;</span></div>
+    </div>
+  </article>
+  <article class="letter" id="d12">
+    <div class="letter-rule"></div>
+    <div class="letter-inner">
+      <header class="letter-head">
+        <span class="no">Informe <b>12</b></span>
+        <span class="hi">Hi, dad!</span>
+      </header>
+      <div class="reading"><span class="reading-ey">Leyendo</span><span class="reading-title">Charlie y la fábrica de Chocolate</span><span class="reading-author">Roald Dahl</span></div>
+      <div class="prose"><p>Hoy fue un día normal, en el cual aprendí algunas palabras en inglés. Aprendí que significa &quot;Place&quot; es lugar; que &quot;Mine&quot; es mío; que &quot;Belong&quot; es pertenece; que &quot;Blankets&quot; es mantas; que &quot;Comb&quot; es peine; que &quot;Toothbrush&quot; es cepillo de dientes; que &quot;Also&quot; es también; que &quot;Kept&quot; es guardó; y por último que &quot;Chose&quot; es eligió.</p><p>A parte aprendí que los &quot;Sustantivos&quot; es inglés no tienen género, como en el español y que por lo general le agregamos una S a un sustantivo para convertirlo en plural. Pero en inglés, si el sustantivo termina con el sonido F, debes cambiar la F por una V y agregarle ES. Por ejemplo: Wife- Wives y Knifes- Knives, esto es lo que aprendí el día de hoy, también hice duolingo donde aprendí éstas palabras y ejemplos.</p><p>Leí dos capitulos de &quot;Charlie y la fábrica de Chocolate&quot; llamados: El gran ascensor de cristal y La Sala del Chocolate de Televisión; de los cuales ya te hablaré.</p><p>Este es mi informe del día de hoy, sobre que hice y que aprendí sobre el inglés, como siempre digo intento aprender palabras nuevas en inglés todos los días; esto es todo.</p></div>
+      <div class="learned"><span class="learned-ey">Palabras nuevas<span class="learned-n">9</span></span><dl class="glossary"><div class="entry"><dt>Place<span class="lang">en</span></dt><dd>lugar</dd></div><div class="entry"><dt>Mine<span class="lang">en</span></dt><dd>mío</dd></div><div class="entry"><dt>Belong<span class="lang">en</span></dt><dd>pertenece</dd></div><div class="entry"><dt>Blankets<span class="lang">en</span></dt><dd>mantas</dd></div><div class="entry"><dt>Comb<span class="lang">en</span></dt><dd>peine</dd></div><div class="entry"><dt>Toothbrush<span class="lang">en</span></dt><dd>cepillo de dientes</dd></div><div class="entry"><dt>Also<span class="lang">en</span></dt><dd>también</dd></div><div class="entry"><dt>Kept<span class="lang">en</span></dt><dd>guardó</dd></div><div class="entry"><dt>Chose<span class="lang">en</span></dt><dd>eligió</dd></div></dl></div>
+      <div class="closing">Thanks. <span class="hrt">&#9829;</span></div>
+    </div>
+  </article>
+  <article class="letter" id="d13">
+    <div class="letter-rule"></div>
+    <div class="letter-inner">
+      <header class="letter-head">
+        <span class="no">Informe <b>13</b></span>
+        <span class="hi">Hi, dad!</span>
+      </header>
+      <div class="reading"><span class="reading-ey">Leyendo</span><span class="reading-title">Charlie y la fábrica de Chocolate</span><span class="reading-author">Roald Dahl</span></div>
+      <div class="prose"><p>Hoy fue un día normal, en el cual aprendí algunas palabras en inglés. Aprendí que significa &quot;Spoon&quot; es cuchara; que &quot;Fork&quot; es tenedor; que &quot;Bookcase&quot; es estantería; que &quot;Bigger&quot; es más grande; y por último que &quot;Autumn&quot; es otoño.</p><p>A parte aprendí que para &quot;He, She y it&quot; agregar una S al verbo. Por ejemplo: She keeps o He eats, esto es lo que aprendí el día de hoy, también hice duolingo donde aprendí éstas palabras y ejemplos.</p><p>Leí dos capitulos de &quot;Charlie y la fábrica de Chocolate&quot; llamados: Mike Tevé es enviado por televisión y Solo queda Charlie; de los cuales te hablaré más adelante.</p><p>Este es mi informe del día de hoy, sobre que hice y que aprendí sobre el inglés, como siempre digo intento aprender nuevas palabras en inglés todos los días; esto es todo.</p></div>
+      <div class="learned"><span class="learned-ey">Palabras nuevas<span class="learned-n">5</span></span><dl class="glossary"><div class="entry"><dt>Spoon<span class="lang">en</span></dt><dd>cuchara</dd></div><div class="entry"><dt>Fork<span class="lang">en</span></dt><dd>tenedor</dd></div><div class="entry"><dt>Bookcase<span class="lang">en</span></dt><dd>estantería</dd></div><div class="entry"><dt>Bigger<span class="lang">en</span></dt><dd>más grande</dd></div><div class="entry"><dt>Autumn<span class="lang">en</span></dt><dd>otoño</dd></div></dl></div>
+      <div class="closing">Thanks. <span class="hrt">&#9829;</span></div>
+    </div>
+  </article>
+  <article class="letter" id="d14">
+    <div class="letter-rule"></div>
+    <div class="letter-inner">
+      <header class="letter-head">
+        <span class="no">Informe <b>14</b></span>
+        <span class="hi">Hi, dad!</span>
+      </header>
+      <div class="reading"><span class="reading-ey">Leyendo</span><span class="reading-title">Charlie y la fábrica de Chocolate</span><span class="reading-author">Roald Dahl</span></div>
+      <div class="prose"><p>Hoy fue un día normal, en el cual aprendí algunas palabras en inglés. Aprendí que significa &quot;Born&quot; es nací; que &quot;Rode&quot; es monté; que &quot;Degree&quot; es título, grado o carrera; que &quot;Bought&quot; puede ser compré; que &quot;Agreed&quot; estuvieron de acuerdo; y por último que &quot;Sent&quot; es envió, esto es lo que aprendí el día de hoy, también hice duolingo donde aprendí éstas palabras.</p><p>Estoy leyendo dos capitulos de &quot;Charlie y la fábrica de Chocolate&quot; llamados: Los otros niños se van a sus casas y La fábrica de chocolate de Charlie, de los cuales te hablaré cuando los termine.</p><p>Este es mi informe del día de hoy, sobre que hice y que aprendí sobre el inglés, como siempre digo intento aprender nuevas palabras en inglés todos los días; esto es todo.</p></div>
+      <div class="learned"><span class="learned-ey">Palabras nuevas<span class="learned-n">5</span></span><dl class="glossary"><div class="entry"><dt>Born<span class="lang">en</span></dt><dd>nací</dd></div><div class="entry"><dt>Rode<span class="lang">en</span></dt><dd>monté</dd></div><div class="entry"><dt>Degree<span class="lang">en</span></dt><dd>título, grado o carrera</dd></div><div class="entry"><dt>Bought<span class="lang">en</span></dt><dd>compré</dd></div><div class="entry"><dt>Sent<span class="lang">en</span></dt><dd>envió</dd></div></dl></div>
+      <div class="closing">Thanks. <span class="hrt">&#9829;</span></div>
+    </div>
+  </article>
+  <article class="letter" id="d15">
+    <div class="letter-rule"></div>
+    <div class="letter-inner">
+      <header class="letter-head">
+        <span class="no">Informe <b>15</b></span>
+        <span class="hi">Hi, dad!</span>
+      </header>
+      <div class="reading"><span class="reading-ey">Leyendo</span><span class="reading-title">Cuentos de Buenas Noches para Niñas Rebeldes 2</span><span class="reading-author">Favilli &amp; Cavallo</span></div>
+      <div class="prose"><p>Hoy fue un día normal, en el cual aprendí algunas palabras en inglés. Aprendí que significa &quot;Slept&quot; es dormí; que &quot;Sticks&quot; es palos; que &quot;Seat&quot; es butaca; que &quot;Suatelier&quot; es más suave; que &quot;Tears&quot; es lágrimas; que &quot;Failure&quot; es fracaso; y por último que &quot;Hassle&quot; es molestia, esto es lo que aprendí el día de hoy, también hice duolingo donde aprendí éstas palabras.</p><p>Leí tres historias de &quot;Cuentos de Buenas Noches para Niñas Rebeldes 2&quot; llamadas: Agatha Christie-escritora, Aisholpan Nurgaiv-cetrera y Alice Ball-química, de las cuales te hablaré más adelante.</p><p>Este es mi informe del día de hoy, sobre que hice y que aprendí sobre el inglés, como siempre digo intento aprender nuevas palabras en inglés todos los días; esto es todo.</p></div>
+      <div class="learned"><span class="learned-ey">Palabras nuevas<span class="learned-n">7</span></span><dl class="glossary"><div class="entry"><dt>Slept<span class="lang">en</span></dt><dd>dormí</dd></div><div class="entry"><dt>Sticks<span class="lang">en</span></dt><dd>palos</dd></div><div class="entry"><dt>Seat<span class="lang">en</span></dt><dd>butaca</dd></div><div class="entry"><dt>Suatelier<span class="lang">en</span></dt><dd>más suave</dd></div><div class="entry"><dt>Tears<span class="lang">en</span></dt><dd>lágrimas</dd></div><div class="entry"><dt>Failure<span class="lang">en</span></dt><dd>fracaso</dd></div><div class="entry"><dt>Hassle<span class="lang">en</span></dt><dd>molestia</dd></div></dl></div>
+      <div class="closing">Thanks. <span class="hrt">&#9829;</span></div>
+    </div>
+  </article>
+  <article class="letter" id="d16">
+    <div class="letter-rule"></div>
+    <div class="letter-inner">
+      <header class="letter-head">
+        <span class="no">Informe <b>16</b></span>
+        <span class="hi">Hi, dad!</span>
+      </header>
+      <div class="reading"><span class="reading-ey">Leyendo</span><span class="reading-title">Cuentos de Buenas Noches para Niñas Rebeldes 2</span><span class="reading-author">Favilli &amp; Cavallo</span></div>
+      <div class="prose"><p>Hoy fue un día normal, en el cual aprendí algunas palabras en inglés. Aprendí que significa &quot;Anybody&quot; es alguien; que &quot;Must&quot; es deber de hacer algo; que &quot;Near&quot; es cerca de; que &quot;Classmates&quot; es compañeros/as; que &quot;Knew&quot; es sabía; y por último que &quot;Taught&quot; es enseñé.</p><p>Por otro lado terminé mi 1er análisis de un párrafo de el libro &quot;Heidi&quot; en inglés, en éste aprendí algunas palabras que verás más tarde. Esto es lo que aprendí el día de hoy, también hice duolingo donde aprendí éstas palabras.</p><p>Leí tres historias de &quot;Cuentos de Buenas Noches para Niñas Rebeldes 2&quot; llamadas: Andrée Peel-miliciana de la resistencia francesa, Angela Merkel-canciller y Anita Garibaldi-revolucionaria, de las cuales te hablaré más adelante.</p><p>Este es mi informe del día de hoy, sobre que hice y que aprendí sobre el inglés, como siempre digo intento aprender nuevas palabras en inglés todos los días; esto es todo.</p></div>
+      <div class="learned"><span class="learned-ey">Palabras nuevas<span class="learned-n">6</span></span><dl class="glossary"><div class="entry"><dt>Anybody<span class="lang">en</span></dt><dd>alguien</dd></div><div class="entry"><dt>Must<span class="lang">en</span></dt><dd>deber de hacer algo</dd></div><div class="entry"><dt>Near<span class="lang">en</span></dt><dd>cerca de</dd></div><div class="entry"><dt>Classmates<span class="lang">en</span></dt><dd>compañeros/as</dd></div><div class="entry"><dt>Knew<span class="lang">en</span></dt><dd>sabía</dd></div><div class="entry"><dt>Taught<span class="lang">en</span></dt><dd>enseñé</dd></div></dl></div>
+      <div class="closing">Thanks. <span class="hrt">&#9829;</span></div>
+    </div>
+  </article>
+  <article class="letter" id="d17">
+    <div class="letter-rule"></div>
+    <div class="letter-inner">
+      <header class="letter-head">
+        <span class="no">Informe <b>17</b></span>
+        <span class="hi">Hi, dad!</span>
+      </header>
+      <div class="reading"><span class="reading-ey">Leyendo</span><span class="reading-title">Cuentos de Buenas Noches para Niñas Rebeldes 2</span><span class="reading-author">Favilli &amp; Cavallo</span></div>
+      <div class="prose"><p>Hoy fue un día diferente ya que es fin de semana, en el cual aprendí algunas palabras en inglés. Aprendí que significa &quot;Few&quot; es algunos o pocas; que &quot;Surroundings&quot; es alrededores; que &quot;Gazed&quot; es mirada/do; que &quot;Scarcely&quot; es apenas; que &quot;Greeted&quot; es saludada; y por último que &quot;Thanking&quot; es agradeciendo, esto es lo que aprendí el día de hoy, también hice duolingo donde aprendí éstas palabras.</p><p>Leí tres historias de &quot;Cuentos de Buenas Noches para Niñas Rebeldes 2&quot; llamadas: Anne Bonny-pirata, Audry Hepburn-actriz y Beatrice Vio-esgrimista, de las cuales te hablaré más adelante.</p><p>Este es mi informe del día de hoy, sobre que hice y que aprendí sobre el inglés, como siempre digo intento aprender nuevas palabras en inglés todos los días; esto es todo.</p></div>
+      <div class="learned"><span class="learned-ey">Palabras nuevas<span class="learned-n">6</span></span><dl class="glossary"><div class="entry"><dt>Few<span class="lang">en</span></dt><dd>algunos o pocas</dd></div><div class="entry"><dt>Surroundings<span class="lang">en</span></dt><dd>alrededores</dd></div><div class="entry"><dt>Gazed<span class="lang">en</span></dt><dd>mirada/do</dd></div><div class="entry"><dt>Scarcely<span class="lang">en</span></dt><dd>apenas</dd></div><div class="entry"><dt>Greeted<span class="lang">en</span></dt><dd>saludada</dd></div><div class="entry"><dt>Thanking<span class="lang">en</span></dt><dd>agradeciendo</dd></div></dl></div>
+      <div class="closing">Thanks. <span class="hrt">&#9829;</span></div>
+    </div>
+  </article>
+  <article class="letter" id="d18">
+    <div class="letter-rule"></div>
+    <div class="letter-inner">
+      <header class="letter-head">
+        <span class="no">Informe <b>18</b></span>
+        <span class="hi">Hi, dad!</span>
+      </header>
+      
+      <div class="prose"><p>Hoy fue un día diferente ya que es fin de semana, en el cual aprendí algunas palabras en inglés. Aprendí que significa &quot;Noon&quot; mediodía; que &quot;Early&quot; es temprano o anticipado; que &quot;Afterward&quot; es después o luego; que &quot;Earliest&quot; es más temprano; que &quot;Midnight&quot; es medianoche; que &quot;Sea&quot; es mar; y por último que &quot;Might&quot; es puede que o quizás, esto es lo que aprendí el día de hoy, también hice duolingo donde aprendí éstas palabras.</p><p>No he leído aún, pero no me acostaré sin hacerlo😊luego te contaré lo que leí.</p><p>Este es mi informe del día de hoy, sobre que hice y que aprendí sobre el inglés, como siempre digo intento aprender nuevas palabras en inglés todos los días; esto es todo.</p></div>
+      <div class="learned"><span class="learned-ey">Palabras nuevas<span class="learned-n">6</span></span><dl class="glossary"><div class="entry"><dt>Early<span class="lang">en</span></dt><dd>temprano o anticipado</dd></div><div class="entry"><dt>Afterward<span class="lang">en</span></dt><dd>después o luego</dd></div><div class="entry"><dt>Earliest<span class="lang">en</span></dt><dd>más temprano</dd></div><div class="entry"><dt>Midnight<span class="lang">en</span></dt><dd>medianoche</dd></div><div class="entry"><dt>Sea<span class="lang">en</span></dt><dd>mar</dd></div><div class="entry"><dt>Might<span class="lang">en</span></dt><dd>puede que o quizás</dd></div></dl></div>
+      <div class="closing">Thanks. <span class="hrt">&#9829;</span></div>
+    </div>
+  </article>
+  <article class="letter" id="d19">
+    <div class="letter-rule"></div>
+    <div class="letter-inner">
+      <header class="letter-head">
+        <span class="no">Informe <b>19</b></span>
+        <span class="hi">Hi, dad!</span>
+      </header>
+      <div class="reading"><span class="reading-ey">Leyendo</span><span class="reading-title">Cuentos de Buenas Noches para Niñas Rebeldes 2</span><span class="reading-author">Favilli &amp; Cavallo</span></div>
+      <div class="prose"><p>Hoy fue un día normal, en el cual aprendí algunas palabras en inglés. Aprendí que significa &quot;Pool&quot; es piscina; que &quot;Sightseeing&quot; es hacer turismo; que &quot;Bundle&quot; es haz; que &quot;Soles&quot; es planta de los pies; que &quot;Fireplace&quot; es chimenea; que &quot;Headphones&quot; es audifonos; que &quot;Curtains&quot; es Cortinas; que &quot;Sunburnt&quot; es bronceada; y por último que &quot;Catch&quot; es atrapa, esto es lo que aprendí el día de hoy, también hice duolingo donde aprendí éstas palabras.</p><p>Leí tres historias de &quot;Cuentos de Buenas Noches para Niñas Rebeldes 2&quot; llamadas: Las Black Manbas-guardabosques, Boudicca-reina y Brenda Milner-neuropsicóloga, de las cuales te hablaré más adelante.</p><p>Este es mi informe del día de hoy, sobre que hice y que aprendí sobre el inglés, como siempre digo intento aprender nuevas palabras en inglés todos los días; esto es todo.</p></div>
+      <div class="learned"><span class="learned-ey">Palabras nuevas<span class="learned-n">9</span></span><dl class="glossary"><div class="entry"><dt>Pool<span class="lang">en</span></dt><dd>piscina</dd></div><div class="entry"><dt>Sightseeing<span class="lang">en</span></dt><dd>hacer turismo</dd></div><div class="entry"><dt>Bundle<span class="lang">en</span></dt><dd>haz</dd></div><div class="entry"><dt>Soles<span class="lang">en</span></dt><dd>planta de los pies</dd></div><div class="entry"><dt>Fireplace<span class="lang">en</span></dt><dd>chimenea</dd></div><div class="entry"><dt>Headphones<span class="lang">en</span></dt><dd>audifonos</dd></div><div class="entry"><dt>Curtains<span class="lang">en</span></dt><dd>Cortinas</dd></div><div class="entry"><dt>Sunburnt<span class="lang">en</span></dt><dd>bronceada</dd></div><div class="entry"><dt>Catch<span class="lang">en</span></dt><dd>atrapa</dd></div></dl></div>
+      <div class="closing">Thanks. <span class="hrt">&#9829;</span></div>
+    </div>
+  </article>
+  <article class="letter" id="d20">
+    <div class="letter-rule"></div>
+    <div class="letter-inner">
+      <header class="letter-head">
+        <span class="no">Informe <b>20</b></span>
+        <span class="hi">Hi, dad!</span>
+      </header>
+      <div class="reading"><span class="reading-ey">Leyendo</span><span class="reading-title">Cuentos de Buenas Noches para Niñas Rebeldes 2</span><span class="reading-author">Favilli &amp; Cavallo</span></div>
+      <div class="prose"><p>Hoy fue un día normal, en el cual aprendí algunas palabras en inglés. Aprendí que significa &quot;Sausage&quot; es salchicha; que &quot;Jam&quot; es mermelada; que &quot;I&#x27;ll have&quot; es yo quiero y se utiliza para pedir algo en un restaurante etc; que &quot;I&#x27;d like&quot; es me gustaría; que &quot;Onion&quot; es cebolla; que &quot;Enough&quot; es suficiente; que &quot;Else&quot; es más; que &quot;Trudging&quot; es caminar penosamente; y por último que &quot;Scarf&quot; es bufanda, esto es lo que aprendí el día de hoy, también hice duolingo donde aprendí éstas palabras.</p><p>Leí tres historias de &quot;Cuentos de Buenas Noches para Niñas Rebeldes 2&quot; llamadas: Buffalo Calf Road Woman-guerrera, Madam C.J. Walker-empresaria y Carmen Amaya-bailaora, de las cuales te hablaré más adelante.</p><p>A parte pinté una mandala de un libro de mandalas que tengo😊.</p><p>Este es mi informe del día de hoy, sobre que hice y que aprendí sobre el inglés, como siempre digo intento aprender nuevas palabras en inglés todos los días; esto es todo.</p></div>
+      <div class="learned"><span class="learned-ey">Palabras nuevas<span class="learned-n">9</span></span><dl class="glossary"><div class="entry"><dt>Sausage<span class="lang">en</span></dt><dd>salchicha</dd></div><div class="entry"><dt>Jam<span class="lang">en</span></dt><dd>mermelada</dd></div><div class="entry"><dt>I&#x27;ll have<span class="lang">en</span></dt><dd>yo quiero y se utiliza para pedir algo en un restaurante etc</dd></div><div class="entry"><dt>I&#x27;d like<span class="lang">en</span></dt><dd>me gustaría</dd></div><div class="entry"><dt>Onion<span class="lang">en</span></dt><dd>cebolla</dd></div><div class="entry"><dt>Enough<span class="lang">en</span></dt><dd>suficiente</dd></div><div class="entry"><dt>Else<span class="lang">en</span></dt><dd>más</dd></div><div class="entry"><dt>Trudging<span class="lang">en</span></dt><dd>caminar penosamente</dd></div><div class="entry"><dt>Scarf<span class="lang">en</span></dt><dd>bufanda</dd></div></dl></div>
+      <div class="closing">Thanks. <span class="hrt">&#9829;</span></div>
+    </div>
+  </article>
+  <article class="letter" id="d21">
+    <div class="letter-rule"></div>
+    <div class="letter-inner">
+      <header class="letter-head">
+        <span class="no">Informe <b>21</b></span>
+        <span class="hi">Hi, dad!</span>
+      </header>
+      <div class="reading"><span class="reading-ey">Leyendo</span><span class="reading-title">Cuentos de Buenas Noches para Niñas Rebeldes 2</span><span class="reading-author">Favilli &amp; Cavallo</span></div>
+      <div class="prose"><p>Hoy fue un día normal, en el cual aprendí algunas palabras en inglés. Aprendí que significa &quot;Mushroom&quot; es champiñón; que &quot;Mugs&quot; es tazones; que &quot;Pick&quot; es levantar; que &quot;Ate&quot; es comió; que &quot;Sell&quot; es venden; que &quot;Hobnailed&quot; es pegado con clavos; que &quot;Shapeless&quot; es Informe; que &quot;Flushed&quot; es enrojecida; que &quot;Wrapped&quot; es envuelta; y por último que &quot;Wound&quot; es herida, esto es lo que aprendí el día de hoy, también hice duolingo donde aprendí éstas palabras.</p><p>Leí tres historias de &quot;Cuentos de Buenas Noches para Niñas Rebeldes 2&quot; llamadas: Celia Cruz-cantante, Chimamanda Ngozi Adichie-escritora y Clara Rockmore-música, de las cuales te hablaré más adelante.</p></div>
+      <div class="learned"><span class="learned-ey">Palabras nuevas<span class="learned-n">10</span></span><dl class="glossary"><div class="entry"><dt>Mushroom<span class="lang">en</span></dt><dd>champiñón</dd></div><div class="entry"><dt>Mugs<span class="lang">en</span></dt><dd>tazones</dd></div><div class="entry"><dt>Pick<span class="lang">en</span></dt><dd>levantar</dd></div><div class="entry"><dt>Ate<span class="lang">en</span></dt><dd>comió</dd></div><div class="entry"><dt>Sell<span class="lang">en</span></dt><dd>venden</dd></div><div class="entry"><dt>Hobnailed<span class="lang">en</span></dt><dd>pegado con clavos</dd></div><div class="entry"><dt>Shapeless<span class="lang">en</span></dt><dd>Informe</dd></div><div class="entry"><dt>Flushed<span class="lang">en</span></dt><dd>enrojecida</dd></div><div class="entry"><dt>Wrapped<span class="lang">en</span></dt><dd>envuelta</dd></div><div class="entry"><dt>Wound<span class="lang">en</span></dt><dd>herida</dd></div></dl></div>
+      <div class="closing">Thanks. <span class="hrt">&#9829;</span></div>
+    </div>
+  </article>
+  <footer>Con todo el cariño, de Lismary para su papá.<span class="sig">&#9829;</span></footer>
+</div>
+</body>
+</html>
